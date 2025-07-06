@@ -1,0 +1,73 @@
+def Add():
+    try:
+        num1 = float(input("First number: "))
+        num2 = float(input("Second number: "))
+        result = num1 + num2
+        print("Result of the operation:", result)
+        return num1, num2
+    except ValueError:
+        print("Only numbers are allowed, please enter a number.")
+        return None, None
+
+
+def Subtract():
+    try:
+        num1 = float(input("First number: "))
+        num2 = float(input("Second number: "))
+        result = num1 - num2
+        print("Result of the operation:", result)
+        return num1, num2
+    except ValueError:
+        print("Only numbers are allowed, please enter a number.")
+        return None, None
+
+
+def Divide():
+    try:
+        num1 = float(input("First number: "))
+        num2 = float(input("Second number: "))
+        if num2 == 0:
+            print("Error: Cannot divide by zero")
+            return None, None
+        result = num1 / num2
+        print("Result of the operation:", result)
+        return num1, num2
+    except ValueError:
+        print("Only numbers are allowed, please enter a number.")
+        return None, None
+
+
+def Multiply():
+    try:
+        num1 = float(input("First number: "))
+        num2 = float(input("Second number: "))
+        result = num1 * num2
+        print("Result of the operation:", result)
+        return num1, num2
+    except ValueError:
+        print("Only numbers are allowed, please enter a number.")
+        return None, None
+
+
+def Menu():
+    option = input(
+        "Menu options:\n1. Add\n2. Subtract\n3. Multiply\n4. Divide\n5. Exit\nChoose an option: "
+    )
+    return option
+
+
+while True:
+    menu_choice = Menu()
+    if "1" in menu_choice:
+        Add()
+    elif "2" in menu_choice:
+        Subtract()
+    elif "3" in menu_choice:
+        Multiply()
+    elif "4" in menu_choice:
+        Divide()
+    elif "5" in menu_choice:
+        print("See you soon")
+        break
+    else:
+        print("Invalid option")
