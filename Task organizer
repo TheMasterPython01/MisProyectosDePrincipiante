@@ -1,0 +1,139 @@
+import json
+from colorama import Fore, init
+
+# Create an empty task list
+task_list = []
+
+
+def add_task():
+    global task_list
+    try:
+        with open("tasks.json", "r") as json_file:
+            task_list = json.load(json_file)
+    except FileNotFoundError:
+        task_list = []
+
+    name = input("Task Name: ")
+    description = input("Task Description: ")
+    status = input("Is it pending or completed?: ")
+    priority = input("Priority high/medium/low: ")
+
+    task = {
+        "Name": name,
+        "Description": description,
+        "Status": status,
+        "Priority": priority,
+    }
+
+    task_list.append(task)
+
+    with open("tasks.json", "w") as json_file:
+        json.dump(task_list, json_file, indent=4)
+
+    return name, description, status, priority, task
+
+
+def view_tasks():
+    try:
+        with open("tasks.json", "r") as json_file:
+            task_list = json.load(json_file)
+
+        if not task_list:
+            print("No tasks registered.")
+            return
+
+        print("Task List:")
+        for i, task in enumerate(task_list, start=1):
+            print(f"Task {i}:")
+            print(f"  Name:        {task['Name']}")
+            print(f"  Description: {task['Description']}")
+            print(f"  Status:      {task['Status']}")
+            print(f"  Priority:    {task['Priority']}")
+            print("-" * 30)
+
+    except FileNotFoundError:
+        print("Task file not found.")
+
+
+def mark_task():
+    try:
+        with open("tasks.json", "r") as file:
+            task_list = json.load(file)
+
+        view_tasks()
+
+        name_to_search = input(
+            "Which task do you want to modify? Type the exact name: "
+        ).strip()
+        task_found = False
+
+        for task in task_list:
+            if task["Name"].strip().lower() == name_to_search.lower():
+                new_status = input(
+                    "Do you want to mark it as 'Completed' or 'Pending'?: "
+                ).strip()
+                task["Status"] = new_status
+                task_found = True
+                break
+
+        if task_found:
+            print("✅ Task successfully modified!")
+        else:
+            print("❌ No task found with that name.")
+
+        with open("tasks.json", "w") as file:
+            json.dump(task_list, file, indent=4)
+
+    except FileNotFoundError:
+        print("Task file not found.")
+
+
+def delete_task():
+    try:
+        with open("tasks.json", "r") as file:
+            task_list = json.load(file)
+    except FileNotFoundError:
+        print("Task file not found.")
+        return
+
+    name_to_delete = input("Which task do you want to delete? Type the exact name: ")
+    new_list = []
+    task_found = False
+
+    for task in task_list:
+        if task["Name"].lower() == name_to_delete.lower():
+            task_found = True
+        else:
+            new_list.append(task)
+
+    with open("tasks.json", "w") as file:
+        json.dump(new_list, file, indent=4)
+
+    if task_found:
+        print("✅ Task successfully deleted.")
+    else:
+        print("❌ No task found with that name.")
+
+
+def menu():
+    init()
+    return input(
+        "Options Menu:\n1. Add task\n2. View tasks\n3. Mark task\n4. Delete task\n5. Exit\nChoose an option: "
+    )
+
+
+while True:
+    option = menu()
+    if option == "1":
+        add_task()
+    elif option == "2":
+        view_tasks()
+    elif option == "3":
+        mark_task()
+    elif option == "4":
+        delete_task()
+    elif option == "5":
+        print(Fore.GREEN + "See you soon")
+        break
+    else:
+        print(Fore.RED + "Task not found")
