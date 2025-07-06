@@ -1,0 +1,91 @@
+import json
+import time
+
+
+def Datosdelusuario():
+    Persona1 = {
+        "Nombre": "Eduardo",
+        "Edad": 21,
+        "Dinero que tiene el usuario": 4000000,
+        "Dinero en la cuenta bancaria": 100,
+    }
+    with open("persona.json", "w") as archivo:
+        json.dump(Persona1, archivo, indent=4)
+
+
+Datosdelusuario()
+
+
+def Depositar():
+    with open("persona.json", "r") as archivo:
+        datos = json.load(archivo)
+    Nombre_del_usuario = datos.get("Nombre", "Eduardo")
+    Dinero_a_depositar = float(
+        input(f"¿Cuanto dinero quieres depositar {Nombre_del_usuario}? :) : ")
+    )
+    print("Procesando...")
+    time.sleep(5)
+
+    Dinero_usuario = datos.get("Dinero que tiene el usuario", 4000000)
+    Dinero_cuenta = datos.get("Dinero en la cuenta bancaria", 0)
+    if Dinero_a_depositar > Dinero_usuario:
+        print("invalido")
+        return
+
+    Dinero_usuario -= Dinero_a_depositar
+    Dinero_cuenta += Dinero_a_depositar
+
+    # Actualizamos los datos
+    datos["Dinero que tiene el usuario"] = Dinero_usuario
+    datos["Dinero en la cuenta bancaria"] = Dinero_cuenta
+
+    # Guardamos los cambios en el archivo
+    with open("persona.json", "w") as archivo:
+        json.dump(datos, archivo, indent=4)
+
+    print(f"Depósito exitoso. Ahora tienes ${Dinero_cuenta:.2f} en tu cuenta.")
+
+
+def Retirar():
+    with open("persona.json", "r") as archivo:
+        datos = json.load(archivo)
+        Nombre_del_usuario = datos.get("Nombre", "Eduardo")
+        Dinero_a_retirar = float(
+            input(f"¿Cuanto dinero quieres retirar {Nombre_del_usuario}? :) : ")
+        )
+        print("Procesando...")
+        time.sleep(5)
+        Dinero_usuario = datos.get("Dinero que tiene el usuario", 4000000)
+        Dinero_cuenta = datos.get("Dinero en la cuenta bancaria", 0)
+        if Dinero_a_retirar > Dinero_cuenta:
+            print("invalido")
+            return
+    Dinero_usuario += Dinero_a_retirar
+    Dinero_cuenta -= Dinero_a_retirar
+    datos["Dinero que tiene el usuario"] = Dinero_usuario
+    datos["Dinero en la cuenta bancaria"] = Dinero_cuenta
+
+    with open("persona.json", "w") as archivo:
+        json.dump(datos, archivo, indent=4)
+        print(f"Retiro con exito. Ahora tienes ${Dinero_cuenta:.2f} en tu cuenta")
+
+
+def Menu():
+    while True:
+        print("Menu del cajero automatico")
+        print("1.-Depositar...")
+        print("2.-Retirar...")
+        print("3.-Salir...")
+        opcion = input("Elija una opcion: ")
+        if opcion == "1":
+            Depositar()
+        elif opcion == "2":
+            Retirar()
+        elif opcion == "3":
+            print("¡Vuelva pronto!")
+            break
+        else:
+            print("Opcion no valida.")
+
+
+Menu()
