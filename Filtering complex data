@@ -1,62 +1,61 @@
 from functools import reduce
 from collections import Counter
 
-ventas = [
+sales = [
     {
-        "cliente": "Alicia",
-        "productos": [
-            {"nombre": "Camisa", "cantidad": 2, "precio_unitario": 15},
-            {"nombre": "Pantalón", "cantidad": 1, "precio_unitario": 25},
+        "customer": "Alice",
+        "products": [
+            {"name": "Shirt", "quantity": 2, "unit_price": 15},
+            {"name": "Pants", "quantity": 1, "unit_price": 25},
         ],
     },
     {
-        "cliente": "Bruno",
-        "productos": [
-            {"nombre": "Camisa", "cantidad": 1, "precio_unitario": 15},
-            {"nombre": "Zapatos", "cantidad": 1, "precio_unitario": 50},
+        "customer": "Bruno",
+        "products": [
+            {"name": "Shirt", "quantity": 1, "unit_price": 15},
+            {"name": "Shoes", "quantity": 1, "unit_price": 50},
         ],
     },
     {
-        "cliente": "Clara",
-        "productos": [{"nombre": "Camisa", "cantidad": 3, "precio_unitario": 15}],
+        "customer": "Clara",
+        "products": [{"name": "Shirt", "quantity": 3, "unit_price": 15}],
     },
 ]
 
 
-def total_de_ventas(cliente):
+def total_sales(customer):
     return reduce(
-        lambda acc, prod: acc + prod["cantidad"] * prod["precio_unitario"],
-        cliente["productos"],
+        lambda acc, product: acc + product["quantity"] * product["unit_price"],
+        customer["products"],
         0,
     )
 
 
-Suma_total_de_ventas_xd = reduce(
-    lambda acc, cliente: acc + total_de_ventas(cliente), ventas, 0
+total_sales_sum = reduce(lambda acc, customer: acc + total_sales(customer), sales, 0)
+
+print(f"The total sales amount is ${total_sales_sum:.2f}")
+
+
+def total_products(customer):
+    return reduce(
+        lambda acc, product: acc + product["quantity"], customer["products"], 0
+    )
+
+
+total_products_sold = reduce(
+    lambda acc, customer: acc + total_products(customer), sales, 0
 )
 
-print(f"La suma total de las ventas es de ${Suma_total_de_ventas_xd:.2f}")
+print(f"Total number of products sold: {total_products_sold}")
 
+product_counter = Counter()
 
-def total_de_productos(cliente):
-    return reduce(lambda acc, prod: acc + prod["cantidad"], cliente["productos"], 0)
+for sale in sales:
+    for product in sale["products"]:
+        product_counter[product["name"]] += product["quantity"]
 
-
-TotalDeProductos = reduce(
-    lambda acc, cliente: acc + total_de_productos(cliente), ventas, 0
-)
-
-print(f"Total de productos vendidos {TotalDeProductos}")
-
-contador_de_productos = Counter()
-
-for venta in ventas:
-    for producto in venta["productos"]:
-        contador_de_productos[producto["nombre"]] += producto["cantidad"]
-
-
-producto_mas_vendidox = contador_de_productos.most_common(1)[0]
+most_sold_product = product_counter.most_common(1)[0]
 
 print(
-    f"El producto mas vendido {producto_mas_vendidox[0]} con {producto_mas_vendidox[1]} unidades"
+    f"The most sold product is {most_sold_product[0]} with {most_sold_product[1]} units"
 )
