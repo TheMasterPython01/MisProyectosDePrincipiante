@@ -1,0 +1,98 @@
+import json
+import time
+
+
+def UserData():
+    person = {
+        "Name": "Eduardo",
+        "Age": 21,
+        "User's Cash": 4000000,
+        "Bank Account Balance": 100,
+    }
+    with open("person.json", "w") as file:
+        json.dump(person, file, indent=4)
+
+
+UserData()
+
+
+def Deposit():
+    with open("person.json", "r") as file:
+        data = json.load(file)
+
+    user_name = data.get("Name", "Eduardo")
+    amount_to_deposit = float(
+        input(f"How much money do you want to deposit, {user_name}? :) : ")
+    )
+    print("Processing...")
+    time.sleep(5)
+
+    user_cash = data.get("User's Cash", 4000000)
+    bank_balance = data.get("Bank Account Balance", 0)
+
+    if amount_to_deposit > user_cash:
+        print("Invalid amount.")
+        return
+
+    user_cash -= amount_to_deposit
+    bank_balance += amount_to_deposit
+
+    data["User's Cash"] = user_cash
+    data["Bank Account Balance"] = bank_balance
+
+    with open("person.json", "w") as file:
+        json.dump(data, file, indent=4)
+
+    print(f"Deposit successful. You now have ${bank_balance:.2f} in your account.")
+
+
+def Withdraw():
+    with open("person.json", "r") as file:
+        data = json.load(file)
+
+    user_name = data.get("Name", "Eduardo")
+    amount_to_withdraw = float(
+        input(f"How much money do you want to withdraw, {user_name}? :) : ")
+    )
+    print("Processing...")
+    time.sleep(5)
+
+    user_cash = data.get("User's Cash", 4000000)
+    bank_balance = data.get("Bank Account Balance", 0)
+
+    if amount_to_withdraw > bank_balance:
+        print("Invalid amount.")
+        return
+
+    user_cash += amount_to_withdraw
+    bank_balance -= amount_to_withdraw
+
+    data["User's Cash"] = user_cash
+    data["Bank Account Balance"] = bank_balance
+
+    with open("person.json", "w") as file:
+        json.dump(data, file, indent=4)
+
+    print(f"Withdrawal successful. You now have ${bank_balance:.2f} in your account.")
+
+
+def Menu():
+    while True:
+        print("ATM Menu")
+        print("1.- Deposit...")
+        print("2.- Withdraw...")
+        print("3.- Exit...")
+        option = input("Choose an option: ")
+
+        if option == "1":
+            Deposit()
+        elif option == "2":
+            Withdraw()
+        elif option == "3":
+            print("See you soon!")
+            break
+        else:
+            print("Invalid option.")
+
+
+Menu()
