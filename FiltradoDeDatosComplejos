@@ -1,0 +1,62 @@
+from functools import reduce
+from collections import Counter
+
+ventas = [
+    {
+        "cliente": "Alicia",
+        "productos": [
+            {"nombre": "Camisa", "cantidad": 2, "precio_unitario": 15},
+            {"nombre": "Pantalón", "cantidad": 1, "precio_unitario": 25},
+        ],
+    },
+    {
+        "cliente": "Bruno",
+        "productos": [
+            {"nombre": "Camisa", "cantidad": 1, "precio_unitario": 15},
+            {"nombre": "Zapatos", "cantidad": 1, "precio_unitario": 50},
+        ],
+    },
+    {
+        "cliente": "Clara",
+        "productos": [{"nombre": "Camisa", "cantidad": 3, "precio_unitario": 15}],
+    },
+]
+
+
+def total_de_ventas(cliente):
+    return reduce(
+        lambda acc, prod: acc + prod["cantidad"] * prod["precio_unitario"],
+        cliente["productos"],
+        0,
+    )
+
+
+Suma_total_de_ventas_xd = reduce(
+    lambda acc, cliente: acc + total_de_ventas(cliente), ventas, 0
+)
+
+print(f"La suma total de las ventas es de ${Suma_total_de_ventas_xd:.2f}")
+
+
+def total_de_productos(cliente):
+    return reduce(lambda acc, prod: acc + prod["cantidad"], cliente["productos"], 0)
+
+
+TotalDeProductos = reduce(
+    lambda acc, cliente: acc + total_de_productos(cliente), ventas, 0
+)
+
+print(f"Total de productos vendidos {TotalDeProductos}")
+
+contador_de_productos = Counter()
+
+for venta in ventas:
+    for producto in venta["productos"]:
+        contador_de_productos[producto["nombre"]] += producto["cantidad"]
+
+
+producto_mas_vendidox = contador_de_productos.most_common(1)[0]
+
+print(
+    f"El producto mas vendido {producto_mas_vendidox[0]} con {producto_mas_vendidox[1]} unidades"
+)
