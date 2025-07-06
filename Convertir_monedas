@@ -1,0 +1,20 @@
+import requests
+
+# Tu clave de API
+API_KEY = "fca_live_lr0owdFTV56P0hfnVsifM5K6cxQUUn1MepiRssc1"
+url = 'https://api.freecurrencyapi.com/v1/latest?apikey=fca_live_lr0owdFTV56P0hfnVsifM5K6cxQUUn1MepiRssc1&currencies=EUR%2CUSD%2CCAD'
+
+# Solicitar datos al usuario
+monto = float(input("Monto a convertir: "))
+moneda_origen = input("Moneda de origen (ej. USD): ").upper()
+moneda_destino = input("Moneda destino (ej. CAD): ").upper()
+
+respuesta = requests.get(url)
+
+if respuesta.status_code == 200:
+    datos = respuesta.json()
+    tasa_cambio = datos['data'][moneda_destino]
+    monto_convertido = monto * tasa_cambio
+    print(f"\n💱 {monto} {moneda_origen} = {monto_convertido:.2f} {moneda_destino}")
+else:
+    print(f"❌ Error {respuesta.status_code}: No se pudo obtener la tasa de cambio.")
