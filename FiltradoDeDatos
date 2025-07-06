@@ -1,0 +1,22 @@
+from functools import reduce
+Ventas = list([99.99, 79.99, 299.99, 999.99, 499.99, 239.99, 120, 80])
+
+
+
+def Filtrar(Ventamayores100):
+    return Ventamayores100 >= 100
+
+Filtrar_datos = list((filter(Filtrar, Ventas)))
+
+def SumarLosImpuestos(Sumar):
+    Funcion =  Sumar * 0.16
+    Funcion1 = Sumar + Funcion
+    return Funcion1
+
+SumarImpuestos = list((map(SumarLosImpuestos, Filtrar_datos)))
+
+
+
+SumaTotalDeLasVentas = (reduce(lambda x, y: x + y , SumarImpuestos))
+
+print(SumaTotalDeLasVentas)
