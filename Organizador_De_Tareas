@@ -1,0 +1,155 @@
+import json  # Exportamos el archivo json
+from colorama import Fore, init  # Exportamos colorama
+
+lista_de_tareas = []  # Hacemos una lista
+
+
+def Agregar_tareas():  # Aqui hacemos la funcion para agregar tareas
+    global lista_de_tareas  # Modificamos facilmente la lista
+    try:
+        with open(
+            "tareas.json", "r"
+        ) as archivo_json:  # Aqui es para abrir el json, 
+            # cuando se termine de crear la tarea pasara a esta ubicacion
+            lista_de_tareas = json.load(archivo_json)
+    except FileNotFoundError:  # Aqui si tenemos problemas si la lista no tiene nada
+        lista_de_tareas = []
+
+    Nombre = input(
+        "Nombre de la tarea: "
+    )  # Preguntamos al usuario el nombre, la tarea, si esta completada o pendiente y las 
+    #clasificamos por tres secciones, alta, media y baja.
+    Tarea = input("Descripcion de la tarea: ")
+    Completada = input("Esta pendiente o completada: ")
+    Prioridad = input("Prioridad alta/media/baja: ")
+
+    tareas = {
+        "Nombre": Nombre,
+        "Tarea": Tarea,
+        "Completada": Completada,
+        "Prioridad": Prioridad,
+    }  # Aqui hacemos un diccionario
+    lista_de_tareas.append(tareas)  # Agregamos dentro de 
+    #la lista los datos
+    # Guarda todo nuevamente
+    with open("tareas.json", "w") as archivo_json:
+        json.dump(lista_de_tareas, archivo_json, indent=4)  # Guardamos el archivo
+
+    return Nombre, Tarea, Completada, Prioridad, tareas  # Nos devuelve los valores.
+
+
+def Ver_tareas():  # Funcion para ver las tareas
+    try:
+        with open(
+            "tareas.json", "r"
+        ) as archivo_json:  # Exportamos tareas.json al codigo.
+            lista_de_tareas = json.load(archivo_json)
+        if not lista_de_tareas:  # Si no hay tareas regristadas dira lo siguiente:
+            print("No hay tareas regristadas")
+            return
+
+        print("Lista de Tareas:")
+        for i, tarea in enumerate(lista_de_tareas, start=1):
+            print(f"Tarea {i}:")
+            print(f"  Nombre:      {tarea['Nombre']}")  # Enumeramos la parte de Nombre
+            print(
+                f"  Descripción: {tarea['Tarea']}"
+            )  # Enumeramos la descripcion de la tarea.
+            print(
+                f"  Estado:      {tarea['Completada']}"
+            )  # Enumeramos el estado si esta pendiente o esta completada la tarea
+            print(
+                f"  Prioridad:   {tarea['Prioridad']}"
+            )  # Enumeramos la Prioridad alta/baja/media etc
+            print(
+                "-" * 30
+            )  # Simplemente imprime 30 guiones ------------------------------ para separar visualmente
+
+    except FileNotFoundError:
+        print("No se encontro el archivo de tareas.")
+
+
+def Marcar_tareas():
+    try:
+        with open("tareas.json", "r") as archivo:
+            lista_de_tareas = json.load(archivo)
+
+        Ver_tareas()  # Llamas a la función para mostrar tareas
+
+        nombre_a_buscar = input(
+            "¿Qué tarea quieres modificar? Escribe el nombre exacto: "
+        ).strip()
+        tarea_encontrada = False
+
+        for tarea in lista_de_tareas:
+            if tarea["Nombre"].strip().lower() == nombre_a_buscar.lower():
+                nuevo_estado = input(
+                    "¿Quieres marcarla como 'Completada' o 'Pendiente'?: "
+                ).strip()
+                tarea["Completada"] = nuevo_estado
+                tarea_encontrada = True
+                break
+
+        if tarea_encontrada:
+            print("✅ ¡Tarea modificada con éxito!")
+        else:
+            print("❌ No se encontró ninguna tarea con ese nombre.")
+
+        with open("tareas.json", "w") as archivo:
+            json.dump(lista_de_tareas, archivo, indent=4)
+
+    except FileNotFoundError:
+        print("No se encontró el archivo de tareas.")
+
+
+def Eliminar_tareas():  # Funcion para borrar las tareas
+    try:
+        with open("tareas.json", "r") as archivo:
+            lista_de_tareas = json.load(archivo)
+    except FileNotFoundError:
+        print("No se encontró el archivo de tareas.")
+        return
+
+    nombre_a_borrar = input(
+        "¿Qué tarea quieres eliminar? Escribe el nombre exacto: "
+    )  # Le pregunta al usuario si quiere eliminar una tarea
+    nueva_lista = []
+    tarea_encontrada = False
+
+    for tarea in lista_de_tareas:
+        if tarea["Nombre"].lower() == nombre_a_borrar.lower():
+            tarea_encontrada = True  # La encontramos, no la agregamos (la borramos) por lo que como se encontro y no la puede hacer nada simplemente la borra
+        else:
+            nueva_lista.append(tarea)  # No es la que queremos borrar, así que se queda
+
+    with open("tareas.json", "w") as archivo:
+        json.dump(nueva_lista, archivo, indent=4)  # Guardamos los cambios
+
+    if tarea_encontrada:
+        print("✅ Tarea eliminada con éxito.")
+    else:
+        print("❌ No se encontró ninguna tarea con ese nombre.")
+
+
+def Menu():  # Se hace la funcion para el menu, la interfaz del usuario lo que vera y las opciones.
+    init()
+    return input(
+        "Menú de opciones:\n1. Agregar tareas\n2. Ver tareas\n3. Marcar tareas\n4. Eliminar tarea\n5. Salir\nElige una opción: "
+    )
+
+
+while True:
+    opcion = Menu()
+    if opcion == "1":
+        Agregar_tareas()
+    elif opcion == "2":
+        Ver_tareas()
+    elif opcion == "3":
+        Marcar_tareas()
+    elif opcion == "4":
+        Eliminar_tareas()
+    elif opcion == "5":
+        print(Fore.GREEN + "Hasta pronto")  # Para salir de la funcion
+        break
+    else:  # De lo contrario que no este 1,2,3,4,5 entonces no se encontro simplemente la tarea
+        print(Fore.RED + "Tarea no encontrada")
