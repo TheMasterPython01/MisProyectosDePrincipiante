@@ -1,0 +1,64 @@
+class Coche: #Aqui creamos una clase y dentro un objeto que sera el coche
+    def __init__(self, marca, Modelo, AñoDeSalida, Precio): #Creamos los atributos
+        self.marca = marca
+        self.Modelo = Modelo
+        self.AñoDeSalida = AñoDeSalida
+        self.Precio = Precio
+    def Saludar(self): #Creamos aqui un metodo
+        print(f"Gerente: Bien, este dato es un {self.Modelo}, Su precio es de {self.Precio}, de la marca {self.marca} ¿Le interesa o no?")
+
+#Creamos los objetos y dentro una funcion para hacer un codigo modular
+def MostrarFord():
+ Coche1 = Coche("Ford", "Mach-E", 2020, "$45,000USD")
+ Coche1.Saludar()
+
+def MostrarTesla():
+ Coche2 = Coche("Tesla", "Model S Plaid", 2021, "$89,990USD")
+ Coche2.Saludar()
+
+def MostrarToyota():
+ Coche3 = Coche("Toyota", "Corolla", 2018, "$22,000USD")
+ Coche3.Saludar()
+
+def MostrarLamborghini():
+ Coche4 = Coche("Lamborghini", "Aventador SVJ", 2018, "$517,000USD")
+ Coche4.Saludar()
+
+def MostrarPorsche():
+ Coche5 = Coche("Porsche", "Taycan Turbo S", 2019, "$185,000USD")
+ Coche5.Saludar()
+
+#Dentro de este menu, sera la opciones para ver de los autos
+def Menu():
+    return input(
+        "Menú de opciones:\n"
+        "1.- Ford Mustang Mach-E\n"
+        "2.- Tesla Model S\n"
+        "3.- Toyota Corolla\n"
+        "4.- Lamborghini Aventador SVJ\n"
+        "5.- Porsche Taycan Turbo S\n"
+        "6.- Irse\n"
+        "Elige una opción: "
+    )
+
+#Se repite infinitamente las opciones y el menu, hasta que salga de la terminal osea la opcion 6 :)
+while True:
+    opcion = Menu()
+    if opcion == "1":
+       MostrarFord()
+    elif opcion == "2":
+       MostrarTesla()
+    elif opcion == "3":
+       MostrarToyota()
+    elif opcion == "4":
+       MostrarLamborghini()
+    elif opcion == "5":
+       MostrarPorsche()
+    elif opcion == "6":
+       print("¡Hasta pronto!")
+       break 
+    else:
+       print("Opcion no valida")
+
+#Por ultimo activamos el menu y el codigo :D
+Menu()
